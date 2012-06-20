@@ -1,24 +1,24 @@
-import gff_parser, splicer
-from definitions import Gene
+import gff_parser, splicer, sys
 from Bio import SeqIO
 from decimal import *
 import distrib
 from subprocess import call
 
 gffvar = "brucei.gff"
-gene_expression = "expresion"
+readsvar = sys.argv[1]
+gene_expression = sys.argv[2]
 utr5 = 50
-utr3 = 30
+utr3 = 50
 
 gff_parser.parse(gffvar, gene_expression, utr5, utr3)
 
-expresion_list = map(lambda x: int(x.rsplit()[1]), open("expresion", "r"))
+expresion_list = map(lambda x: int(x.rsplit()[1]), open(gene_expression, "r"))
 total_reads = sum(expresion_list)
 
 def __printReads(gffvar, coef_var):
     n=0
-    exp_file = open("expresion_normal","w")
-    reads_file = open("reads1.fasta","w")
+    exp_file = open(readsvar+".exp_normal","w")
+    reads_file = open(readsvar+".fasta","w")
     for i in SeqIO.parse(gffvar + ".utr.fasta", "fasta"):
         read_var = round(distrib.valueNormal(coef_var, int(expresion_list[n])))
         reads_list = splicer.generate_reads(i.seq, int(read_var))

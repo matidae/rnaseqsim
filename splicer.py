@@ -24,12 +24,12 @@ def __coverage_bias (gene_len):
 #Dohm et al.(2008) Substantial biases in ultra-short read data sets from high-throughput DNA sequencing. Nucleic Acids Research, 36(16), p.e105.
 def __gc_bias(sequence, weigth):
     aux_read = ""
-    aux_gc = 0.0
+    aux_gc = 0
     for i in xrange(0,3):
         pos = __weighted_index(weigth)
         read = sequence[pos:pos+30]
         gc = (read.count("G") + read.count("C")) / float(len(read))
-        if aux_gc < gc:
+        if aux_gc <= gc:
             aux_read = read
             aux_gc = gc
     return aux_read
